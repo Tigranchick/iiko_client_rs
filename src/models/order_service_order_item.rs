@@ -83,7 +83,7 @@ impl OrderServiceOrderItem {
         OrderServiceOrderItem {
             service: Box::new(service),
             cost,
-            r#type,
+            r#type: Some(r#type),
             status,
             deleted: None,
             amount,
