@@ -53,8 +53,11 @@ pub struct OrderProductOrderItem {
     /// Total amount per item including tax, discounts/surcharges.
     #[serde(rename = "resultSum", skip_serializing_if = "Option::is_none")]
     pub result_sum: Option<f64>,
-    #[serde(rename = "type")]
-    pub r#type: String,
+   
+    /// Item type.
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+
     /// Item cooking status.
     #[serde(rename = "status")]
     pub status: models::OrderItemStatus,
@@ -110,7 +113,6 @@ impl OrderProductOrderItem {
         price: f64,
         cost: f64,
         price_predefined: bool,
-        r#type: String,
         status: models::OrderItemStatus,
         amount: f64,
     ) -> OrderProductOrderItem {
@@ -123,7 +125,7 @@ impl OrderProductOrderItem {
             position_id: None,
             tax_percent: None,
             result_sum: None,
-            r#type,
+            r#type: Some("Product".to_string()),
             status,
             deleted: None,
             amount,

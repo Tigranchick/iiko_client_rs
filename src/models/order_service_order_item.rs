@@ -20,8 +20,9 @@ pub struct OrderServiceOrderItem {
     /// Total cost per item without tax, discounts/surcharges.
     #[serde(rename = "cost")]
     pub cost: f64,
-    #[serde(rename = "type")]
-    pub r#type: String,
+
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
     /// Item cooking status.
     #[serde(rename = "status")]
     pub status: models::OrderItemStatus,

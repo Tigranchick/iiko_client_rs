@@ -41,8 +41,9 @@ pub struct OrderCompoundOrderItem {
         skip_serializing_if = "Option::is_none"
     )]
     pub template: Option<Option<Box<models::OrderCompoundItemTemplate>>>,
-    #[serde(rename = "type")]
-    pub r#type: String,
+
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
     /// Item cooking status.
     #[serde(rename = "status")]
     pub status: models::OrderItemStatus,
@@ -104,7 +105,7 @@ impl OrderCompoundOrderItem {
             secondary_component: None,
             common_modifiers: None,
             template: None,
-            r#type,
+            r#type: Some(r#type),
             status,
             deleted: None,
             amount,

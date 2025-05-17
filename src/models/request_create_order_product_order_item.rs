@@ -36,8 +36,9 @@ pub struct RequestCreateOrderProductOrderItem {
         skip_serializing_if = "Option::is_none"
     )]
     pub position_id: Option<Option<uuid::Uuid>>,
-    #[serde(rename = "type")]
-    pub r#type: String,
+
+     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
     /// Quantity.
     #[serde(rename = "amount")]
     pub amount: f64,
@@ -80,7 +81,7 @@ impl RequestCreateOrderProductOrderItem {
             modifiers: None,
             price,
             position_id: None,
-            r#type,
+            r#type: Some(r#type),
             amount,
             product_size_id: None,
             combo_information: None,
