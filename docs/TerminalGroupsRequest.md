@@ -1,0 +1,13 @@
+# TerminalGroupsRequest
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**organization_ids** | [**Vec<uuid::Uuid>**](uuid::Uuid.md) | Organizations IDs for which information is requested.                 Can be obtained by `/api/1/organizations` operation. | 
+**include_disabled** | Option<**bool**> | Attribute that shows that response contains disabled terminal groups. | [optional]
+**return_external_data** | Option<**Vec<String>**> | External data keys that have to be returned. | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
