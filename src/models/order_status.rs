@@ -23,6 +23,8 @@ pub enum OrderStatus {
     Closed,
     #[serde(rename = "Deleted")]
     Deleted,
+    #[serde(rename = "Served")]
+    Served
 }
 
 impl std::fmt::Display for OrderStatus {
@@ -32,6 +34,7 @@ impl std::fmt::Display for OrderStatus {
             Self::Bill => write!(f, "Bill"),
             Self::Closed => write!(f, "Closed"),
             Self::Deleted => write!(f, "Deleted"),
+            Self::Served => write!(f, "Served"),
         }
     }
 }
