@@ -2,3 +2,5 @@
 **/*.rs.bk
 Cargo.lock
 /.vscode/
+src/.DS_Store
+.DS_Store

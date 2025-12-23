@@ -35,6 +35,8 @@ pub enum PaymentTypeKind {
     Sberbank,
     #[serde(rename = "Trpos")]
     Trpos,
+    #[serde(rename = "IikoCard")]
+    IikoCard,
 }
 
 impl std::fmt::Display for PaymentTypeKind {
@@ -50,6 +52,7 @@ impl std::fmt::Display for PaymentTypeKind {
             Self::SmartSale => write!(f, "SmartSale"),
             Self::Sberbank => write!(f, "Sberbank"),
             Self::Trpos => write!(f, "Trpos"),
+            Self::IikoCard => write!(f, "IikoCard"),
         }
     }
 }
