@@ -24,6 +24,17 @@ pub enum Api1AccessTokenPostError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`api2_access_token_post`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Api2AccessTokenPostError {
+    Status400(models::ErrorResponse),
+    Status401(models::ErrorResponse),
+    Status500(models::ErrorResponse),
+    Status408(models::ErrorResponse),
+    UnknownValue(serde_json::Value),
+}
+
 pub async fn api1_access_token_post(
     configuration: &configuration::Configuration,
     timeout: Option<i32>,
@@ -67,6 +78,57 @@ pub async fn api1_access_token_post(
     } else {
         let content = resp.text().await?;
         let entity: Option<Api1AccessTokenPostError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent {
+            status,
+            content,
+            entity,
+        }))
+    }
+}
+
+pub async fn api2_access_token_post(
+    configuration: &configuration::Configuration,
+    timeout: Option<i32>,
+    get_access_token_v2_request: Option<models::GetAccessTokenV2Request>,
+) -> Result<models::GetAccessTokenV2Response, Error<Api2AccessTokenPostError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_timeout = timeout;
+    let p_get_access_token_v2_request = get_access_token_v2_request;
+
+    let uri_str = format!("{}/api/v2/access_token", configuration.base_path);
+    let mut req_builder = configuration
+        .client
+        .request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    if let Some(param_value) = p_timeout {
+        req_builder = req_builder.header("Timeout", param_value.to_string());
+    }
+    req_builder = req_builder.json(&p_get_access_token_v2_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetAccessTokenV2Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetAccessTokenV2Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<Api2AccessTokenPostError> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent {
             status,
             content,
