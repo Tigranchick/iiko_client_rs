@@ -20,7 +20,7 @@ pub struct GetAccessTokenV2Request {
     #[serde(rename = "clientSecret")]
     pub client_secret: String,
     /// API key generated in iikoWeb → "Integrations" → "API Keys".
-    #[serde(rename = "apiLogin")]
+    #[serde(rename = "apiKey")]
     pub api_login: String,
 }
 
